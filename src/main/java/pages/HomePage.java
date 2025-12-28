@@ -1,10 +1,15 @@
+package pages;
+
+import bots.ActionsBot;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
+import utils.JsonReader;
 
 public class HomePage {
 
     private WebDriver driver;
+    private ActionsBot actionsBot;
     private static int cartCount = 0;
 
     // Locator for the cart icon (this is still necessary for validation)
@@ -12,14 +17,17 @@ public class HomePage {
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
+        this.actionsBot = new ActionsBot(driver);
     }
 
     // Method to add an item to the cart by index (no redundant locator)
     public HomePage addToCartByIndex(int ...index) {
         // Dynamically generate the XPath based on the provided index
-        By dynamicAddToCartButton = By.xpath("(//button[text()='Add to cart'])[" + index + "]");
-        driver.findElement(dynamicAddToCartButton).click();
-        cartCount++;
+        for (int i : index) {
+            By addToCartButton = By.xpath("(//button[contains(text(),'Add to cart')])[" + i + "]");
+            actionsBot.click(addToCartButton);
+            cartCount++;
+        }
         System.out.println("Item added to cart. Current cart count: " + cartCount);
         return this;
     }

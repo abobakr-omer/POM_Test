@@ -1,27 +1,33 @@
+package tests;
+
+import drivers.WebDriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
+import pages.LoginPage;
+import utils.JsonReader;
+import utils.PropertyReader;
 
 public class HomeTest {
 
     //Variables
     private WebDriver driver;
+    JsonReader jsonReader;
 
     //Configuration before and after methods
     @BeforeTest
     public void setUp(){
-        EdgeOptions options=new EdgeOptions();
-        options.addArguments("--start-maximized");
-        driver=new EdgeDriver(options);
-        driver.get("https://www.saucedemo.com/");
+        driver= WebDriverFactory.initDriver();
+        jsonReader=new JsonReader("data");
+        driver.get(PropertyReader.getProperty("baseUrl"));
     }
 
     @AfterMethod
     public void tearDown(){
-        driver.quit();
+        WebDriverFactory.quitDriver();
     }
 
     // Test methods
@@ -29,9 +35,9 @@ public class HomeTest {
     @Test
     public void addToCartTC(){
         new LoginPage(driver).
-                login("standard_user","secret_sauce").
+                login(jsonReader.getJsonData("username"), jsonReader.getJsonData("password")).
                 isLoggedIn("https://www.saucedemo.com/inventory.html").
-                addToCartByIndex(3).addToCartByIndex(2).addToCartByIndex(4)
+                addToCartByIndex(1,2,3)
                 .validateCartIcon();
     }
 

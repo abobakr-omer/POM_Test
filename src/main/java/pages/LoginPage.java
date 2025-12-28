@@ -1,3 +1,6 @@
+package pages;
+
+import bots.ActionsBot;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
@@ -6,6 +9,7 @@ public class LoginPage {
 
     //Variables
     private WebDriver driver;
+    private ActionsBot actionsBot;
 
 
     //Locators
@@ -21,6 +25,7 @@ public class LoginPage {
     //Constructor
     public LoginPage(WebDriver driver){
         this.driver=driver;
+        this.actionsBot=new ActionsBot(driver);
     }
 
 
@@ -29,9 +34,9 @@ public class LoginPage {
     //Actions
 
     public LoginPage login(String username, String pass){
-        driver.findElement(userName).sendKeys(username);
-        driver.findElement(password).sendKeys(pass);
-        driver.findElement(loginBtn).click();
+        actionsBot.type(userName,username);
+        actionsBot.type(password,pass);
+        actionsBot.click(loginBtn);
         return this;
     }
 
@@ -41,7 +46,7 @@ public class LoginPage {
     }
 
     public boolean notLogin(String expectedErrorMsg){
-        return  driver.findElement(errorMsg).getText().equals(expectedErrorMsg);
+        return  actionsBot.getText(errorMsg).equals(expectedErrorMsg);
     }
 
 

@@ -1,29 +1,34 @@
+package tests;
+
+import drivers.WebDriverFactory;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
-import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeTest  ;
 import org.testng.annotations.Test;
+import pages.LoginPage;
+import utils.JsonReader;
+import utils.PropertyReader;
 
 public class LoginTest {
 
     //Variables
     private WebDriver driver;
-    //LoginPage loginPage;
+    //pages.LoginPage loginPage;
+    JsonReader jsonReader;
 
     //Configuration before and after methods
     @BeforeTest
      public void setUp(){
-        EdgeOptions options=new EdgeOptions();
-        options.addArguments("--start-maximized");
-        driver=new EdgeDriver(options);
-        driver.get("https://www.saucedemo.com/");
+        driver= WebDriverFactory.initDriver();
+        jsonReader=new JsonReader("data");
+        driver.get(PropertyReader.getProperty("baseUrl"));
     }
 
     @AfterMethod
     public void tearDown(){
-        driver.quit();
+        WebDriverFactory.quitDriver();
     }
 
 
@@ -32,7 +37,7 @@ public class LoginTest {
     @Test
     public void validLoginTC(){
        new LoginPage(driver)
-               .login("standard_user","secret_sauce")
+               .login(jsonReader.getJsonData("username"), jsonReader.getJsonData("password"))
                .isLoggedIn("https://www.saucedemo.com/inventory.html");
     }
 
