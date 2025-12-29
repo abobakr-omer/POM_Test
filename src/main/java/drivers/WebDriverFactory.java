@@ -22,6 +22,9 @@ public class WebDriverFactory {
         return driverThreadLocal.get();
     }
 
+
+
+
     public static WebDriver get() {
         return driverThreadLocal.get();
     }

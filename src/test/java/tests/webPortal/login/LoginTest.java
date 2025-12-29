@@ -1,12 +1,11 @@
-package tests;
+package tests.webPortal.login;
 
 import drivers.WebDriverFactory;
 import io.qameta.allure.*;
 import io.qameta.allure.testng.Tag;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.edge.EdgeOptions;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeTest  ;
 import org.testng.annotations.Test;
 import pages.LoginPage;
@@ -21,10 +20,10 @@ public class LoginTest {
     JsonReader jsonReader;
 
     //Configuration before and after methods
-    @BeforeTest
+    @BeforeMethod
      public void setUp(){
-        driver= WebDriverFactory.initDriver();
         jsonReader=new JsonReader("data");
+        driver= WebDriverFactory.initDriver();
         driver.get(PropertyReader.getProperty("baseUrl"));
     }
 
@@ -36,7 +35,7 @@ public class LoginTest {
 
 
     //Test methods
-    @Test
+    @Test(priority = 1)
     @Description("Verify that user is able to login with valid credentials")
     @Tag("ValidLogin")
     @Owner("Aboubakr")
@@ -53,7 +52,11 @@ public class LoginTest {
                .isLoggedIn("https://www.saucedemo.com/inventory.html");
     }
 
-    @Test
+    //Behavioral-based hierarchy
+    @Epic("Web Portal Login")
+    @Feature("Login Feature")
+    @Story("As a user, I should not be able to login with invalid credentials")
+    @Test(priority = 2)
     public void inValidLoginTC(){
         new LoginPage(driver).login("inValid User","secret_sauce");
     }

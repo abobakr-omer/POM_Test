@@ -1,6 +1,7 @@
 package pages;
 
 import bots.ActionsBot;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
@@ -21,6 +22,7 @@ public class HomePage {
     }
 
     // Method to add an item to the cart by index (no redundant locator)
+    @Step("Add item(s) to cart by index: {index}")
     public HomePage addToCartByIndex(int ...index) {
         // Dynamically generate the XPath based on the provided index
         for (int i : index) {
@@ -33,6 +35,7 @@ public class HomePage {
     }
 
     // Method to validate the cart icon count
+    @Step("Validate cart icon shows correct item count")
     public HomePage validateCartIcon() {
         String cartIconText = driver.findElement(cartIcon).getText();
         Assert.assertEquals(cartIconText, String.valueOf(cartCount), "Item was not added to cart");
